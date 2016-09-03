@@ -16,20 +16,11 @@ double XWindow = 1500, YWindow = 800;
 int main ()
     {
     txCreateWindow (XWindow, YWindow);
-    C_Ball ball [150] = {};
-    Mass_Ball (ball, 150);
+    C_Ball ball [15] = {};
+    Mass_Ball (ball, 15);
     for (int i = 0;; i++)
         {
-        txBegin ();
-        if (!GetAsyncKeyState (VK_SPACE))
-            {
-            txSetFillColor (TX_BLACK);
-            txSetColor (TX_BLACK);
-            txClear ();
-            }
-        Dvig_and_draw (ball, 150);
-        txSleep (0);
-        txEnd ();
+        Dvig_and_draw (ball, 15);
         }
     }
 
@@ -40,8 +31,8 @@ void Mass_Ball (C_Ball b [], int N)
         b[i].r  = random (5, 20);
         b[i].x  = random (b[i].r, XWindow - b[i].r);
         b[i].y  = random (b[i].r, YWindow - b[i].r);
-        b[i].vx = random (-5, 5);
-        b[i].vy = random (-5, 5);
+        b[i].vx = random (0.1, 5);
+        b[i].vy = random (0.1, 5);
         b[i].color = RGB (random (100, 255), random (100, 255), random (100, 255));
         }
     }
@@ -67,7 +58,7 @@ void Dvig_and_draw (C_Ball b [], int N)
         if (b[i].y + b[i].r >= YWindow)
             {
             b[i].vy = -b[i].vy;
-            b[i].y = YWindow - b[i].r;
+            b[i].y = YWindow - b.r[i];
             }
         if (b[i].y - b[i].r <= 0)
             {

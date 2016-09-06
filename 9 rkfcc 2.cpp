@@ -8,7 +8,7 @@ struct C_Ball
     COLORREF color;
     };
 
-double VX [1500] = {}, VY [1500] = {};
+double VX [3000] = {}, VY [3000] = {};
 int N_M = 0;
 double k = 3.525;
 
@@ -17,10 +17,11 @@ void Dvig_and_draw (C_Ball b [], int N);
 double Dist (double x1, double y1, double x2, double y2);
 void Osnovn ();
 
-double XWindow = 1500, YWindow = 800;
+double XWindow = GetSystemMetrics (SM_CXSCREEN), YWindow = GetSystemMetrics (SM_CYSCREEN);
 
 int main ()
     {
+    _txWindowStyle &= ~ WS_CAPTION;
     txCreateWindow (XWindow, YWindow);
     txTextCursor (false);
     Osnovn ();
@@ -28,8 +29,8 @@ int main ()
 
 void Osnovn ()
     {
-    C_Ball ball [300] = {};
-    Mass_Ball (ball, 300);
+    C_Ball ball [600] = {};
+    Mass_Ball (ball, 600);
     printf ("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ");
     for (int i = 0; !GetAsyncKeyState (VK_ESCAPE); i++)
         {
@@ -40,7 +41,7 @@ void Osnovn ()
             txSetColor (TX_BLACK);
             txClear ();
             }
-        Dvig_and_draw (ball, 300);
+        Dvig_and_draw (ball, 600);
         if (GetAsyncKeyState (VK_UP) && k != 0.025) k -= 0.025;
         if (GetAsyncKeyState (VK_DOWN)) k += 0.025;
         printf ("%g,\n\n\n\n\n\n\n\n\n\n\n\n\n ", k);
@@ -53,7 +54,7 @@ void Mass_Ball (C_Ball b [], int N)
     {
     for (int i = 0; i < N; i++)
         {
-        b[i].r  = random (1, 5);
+        b[i].r  = random (0.5, 10);
         b[i].x  = random (b[i].r, XWindow - b[i].r);
         b[i].y  = random (b[i].r, YWindow - b[i].r);
         b[i].vx = 0;
@@ -68,11 +69,11 @@ void Dvig_and_draw (C_Ball b [], int N)
 
     for (int i = 0; i < N; i++, N_M ++)
         {
-        N_M = N_M%1500;
+        N_M = N_M%3000;
         d = Dist (txMouseX (), txMouseY(), b[i].x, b[i].y);
-        if (d > 1020 - 255) d_c = 255;
+        if (d > 765) d_c = 255;
         else         d_c = d / 3;
-        b[i].color = RGB (255 - d_c, d_c, d_c);
+        b[i].color = RGB (d_c, 0, 255 - d_c);
 
         txSetColor (b[i].color);
         txSetFillColor (b[i].color);
@@ -90,7 +91,7 @@ void Dvig_and_draw (C_Ball b [], int N)
         if (VX[i] < -10) VX[i] = -10;
         if (VY[i] < -10) VY[i] = -10;*/
 
-        if (b[i].x + b[i].r >= XWindow)
+        /*if (b[i].x + b[i].r >= XWindow)
             {
             b[i].vx = -b[i].vx;
             b[i].x = XWindow - b[i].r;
@@ -110,7 +111,7 @@ void Dvig_and_draw (C_Ball b [], int N)
             {
             b[i].vy = -b[i].vy;
             b[i].y = b[i].r;
-            }
+            }*/
         b[i].x += b[i].vx;
         b[i].y += b[i].vy;
         }

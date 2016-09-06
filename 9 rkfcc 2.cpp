@@ -8,6 +8,10 @@ struct C_Ball
     COLORREF color;
     };
 
+double VX [1500] = {}, VY [1500] = {};
+int N_M = 0;
+double k = 3.525;
+
 void Mass_Ball (C_Ball b [], int N);
 void Dvig_and_draw (C_Ball b [], int N);
 double Dist (double x1, double y1, double x2, double y2);
@@ -24,9 +28,10 @@ int main ()
 
 void Osnovn ()
     {
-    C_Ball ball [15000] = {};
-    Mass_Ball (ball, 15000);
-    for (int i = 0;; i++)
+    C_Ball ball [300] = {};
+    Mass_Ball (ball, 300);
+    printf ("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ");
+    for (int i = 0; !GetAsyncKeyState (VK_ESCAPE); i++)
         {
         txBegin ();
         if (!GetAsyncKeyState (VK_SPACE))
@@ -35,8 +40,11 @@ void Osnovn ()
             txSetColor (TX_BLACK);
             txClear ();
             }
-        Dvig_and_draw (ball, 15000);
-        txSleep (10);
+        Dvig_and_draw (ball, 300);
+        if (GetAsyncKeyState (VK_UP) && k != 0.025) k -= 0.025;
+        if (GetAsyncKeyState (VK_DOWN)) k += 0.025;
+        printf ("%g,\n\n\n\n\n\n\n\n\n\n\n\n\n ", k);
+        //txSleep (10);
         txEnd ();
         }
     }
@@ -45,7 +53,7 @@ void Mass_Ball (C_Ball b [], int N)
     {
     for (int i = 0; i < N; i++)
         {
-        b[i].r  = random (0.5, 1);
+        b[i].r  = random (1, 5);
         b[i].x  = random (b[i].r, XWindow - b[i].r);
         b[i].y  = random (b[i].r, YWindow - b[i].r);
         b[i].vx = 0;
@@ -58,23 +66,31 @@ void Dvig_and_draw (C_Ball b [], int N)
     {
     double d = 0, d_c = 0;
 
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < N; i++, N_M ++)
         {
+        N_M = N_M%1500;
         d = Dist (txMouseX (), txMouseY(), b[i].x, b[i].y);
-        if (d > 510) d_c = 255;
-        else         d_c = d / 2;
-        b[i].color = RGB (255 - d_c, d_c, 0);
+        if (d > 1020 - 255) d_c = 255;
+        else         d_c = d / 3;
+        b[i].color = RGB (255 - d_c, d_c, d_c);
 
         txSetColor (b[i].color);
         txSetFillColor (b[i].color);
         txCircle (b[i].x, b[i].y, b[i].r);
 
-        b[i].vx = (txMouseX() - b[i].x); //+ (txMouseX() - b[i].x) / fabs(txMouseX() - b[i].x);
-        b[i].vy = (txMouseY() - b[i].y); //+ (txMouseY() - b[i].y) / fabs(txMouseY() - b[i].y);
-        b[i].x += b[i].vx;
-        b[i].y += b[i].vy;
+        b[i].vx = VX[N_M];
+        b[i].vy = VY[N_M];
 
-        /*if (b[i].x + b[i].r >= XWindow)
+        VX[N_M] = (txMouseX() - b[i].x) / k; //+ (txMouseX() - b[i].x) / fabs(txMouseX() - b[i].x);
+        VY[N_M] = (txMouseY() - b[i].y) / k; //+ (txMouseY() - b[i].y) / fabs(txMouseY() - b[i].y);
+
+        /*if (VX[i] > 10) VX[i] = 10;
+        if (VY[i] > 10) VY[i] = 10;
+
+        if (VX[i] < -10) VX[i] = -10;
+        if (VY[i] < -10) VY[i] = -10;*/
+
+        if (b[i].x + b[i].r >= XWindow)
             {
             b[i].vx = -b[i].vx;
             b[i].x = XWindow - b[i].r;
@@ -95,7 +111,8 @@ void Dvig_and_draw (C_Ball b [], int N)
             b[i].vy = -b[i].vy;
             b[i].y = b[i].r;
             }
-           */
+        b[i].x += b[i].vx;
+        b[i].y += b[i].vy;
         }
     }
 

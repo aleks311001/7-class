@@ -8,7 +8,7 @@ struct C_Ball
     COLORREF color;
     };
 
-double VX [3000] = {}, VY [3000] = {};
+double VX [15000] = {}, VY [15000] = {};
 int N_M = 0;
 double k = 3.525;
 
@@ -29,19 +29,19 @@ int main ()
 
 void Osnovn ()
     {
-    C_Ball ball [600] = {};
-    Mass_Ball (ball, 600);
+    C_Ball ball [3000] = {};
+    Mass_Ball (ball, 3000);
     printf ("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ");
     for (int i = 0; !GetAsyncKeyState (VK_ESCAPE); i++)
         {
         txBegin ();
-        if (!GetAsyncKeyState (VK_SPACE))
+        if (GetAsyncKeyState (VK_SPACE))
             {
             txSetFillColor (TX_BLACK);
             txSetColor (TX_BLACK);
             txClear ();
             }
-        Dvig_and_draw (ball, 600);
+        Dvig_and_draw (ball, 3000);
         if (GetAsyncKeyState (VK_UP) && k != 0.025) k -= 0.025;
         if (GetAsyncKeyState (VK_DOWN)) k += 0.025;
         printf ("%g,\n\n\n\n\n\n\n\n\n\n\n\n\n ", k);
@@ -54,7 +54,7 @@ void Mass_Ball (C_Ball b [], int N)
     {
     for (int i = 0; i < N; i++)
         {
-        b[i].r  = random (0.5, 10);
+        b[i].r  = random (0.5, 1);
         b[i].x  = random (b[i].r, XWindow - b[i].r);
         b[i].y  = random (b[i].r, YWindow - b[i].r);
         b[i].vx = 0;
@@ -69,11 +69,11 @@ void Dvig_and_draw (C_Ball b [], int N)
 
     for (int i = 0; i < N; i++, N_M ++)
         {
-        N_M = N_M%3000;
+        N_M = N_M%15000;
         d = Dist (txMouseX (), txMouseY(), b[i].x, b[i].y);
         if (d > 765) d_c = 255;
         else         d_c = d / 3;
-        b[i].color = RGB (d_c, 0, 255 - d_c);
+        b[i].color = RGB (d_c, d_c, 255 - d_c);
 
         txSetColor (b[i].color);
         txSetFillColor (b[i].color);
